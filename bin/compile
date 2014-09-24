@@ -143,6 +143,15 @@ fi
 echo "       Running: $BUILD_COMMAND"
 
 cd $BUILD_DIR
+
+echo "But first, printing out the deps"
+PATH=.lein/bin:$PATH JVM_OPTS="-Xmx600m" \
+  LEIN_JVM_OPTS="-Xmx400m -Duser.home=$BUILD_DIR" \
+  lein with-profile production deps :tree 2>&1 | sed -u 's/^/       /'
+
+echo "OK, done that. Next, the real thing:"
+
+
 PATH=.lein/bin:$PATH JVM_OPTS="-Xmx600m" \
   LEIN_JVM_OPTS="-Xmx400m -Duser.home=$BUILD_DIR" \
   $BUILD_COMMAND 2>&1 | sed -u 's/^/       /'
